@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .form-container {
+        margin: 40px auto;
+        max-width: 500px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    input[type="text"], button {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .back-link a {
+        text-decoration: none;
+        color: #007bff;
+        transition: color 0.3s;
+    }
+
+    .back-link a:hover {
+        color: #0056b3;
+    }
+</style>
+
+ <!-- Flash Messages -->
+ {% with messages = get_flashed_messages(with_categories=true) %}
+ {% if messages %}
+ <div class="mt-4">
+     {% for category, message in messages %}
+     <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+         {{ message }}
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>
+     {% endfor %}
+ </div>
+ {% endif %}
+ {% endwith %}
+
+<div class="form-container">
+    <h2>Add Assessment Type</h2>
+    <form method="POST" action="{{ url_for('main.add_assessment_type') }}">
+        {{ form.hidden_tag() }}
+
+        <label for="name">Assessment Type Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter assessment type name" required>
+
+        <!-- Remove school selection, automatically associate with logged-in user -->
+        <p><strong>School:</strong> {{ current_user.school.name }}</p>
+
+        <button type="submit">Add</button>
+    </form>
+    <div class="back-link">
+        <a href="{{ url_for('main.assessment_types') }}">Back to Assessment Types</a>
+    </div>
+</div>
+{% endblock %}

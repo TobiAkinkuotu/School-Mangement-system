@@ -1,0 +1,20 @@
+import json
+
+fee_components = {
+    "Tuition Fee": "Fee for academic instruction and resources.",
+    "Registration Fee": "Fee for enrollment in the academic year.",
+    "PTA Levy": "Parent-Teacher Association levy for school activities.",
+    "Sports Fee": "Fee for participation in sports and physical activities.",
+    "Uniform Fee": "Cost of school uniforms.",
+    "Textbooks/Workbooks": "Cost of textbooks and workbooks for the academic year.",
+    "Examination Fee": "Fee for conducting examinations and assessments.",
+    "ICT Fee": "Fee for access to ICT facilities and resources.",
+    "Medical Fee": "Fee for access to medical facilities and services.",
+    "Miscellaneous": "Additional fees for other school-related activities."
+}
+
+# Save as JSON file
+with open("fee_components.json", "w") as file:
+    json.dump(fee_components, file, indent=4)
+
+print("Fee components saved to 'fee_components.json'")

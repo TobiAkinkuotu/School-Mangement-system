@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Assessment Type</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }} {{ form.name }}
+    {% if form.name.errors %}
+        <ul class="errors">
+            {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <button type="submit">Save Changes</button>
+</form>
+<a href="{{ url_for('main.assessment_types') }}">Back to Assessment Types</a>
+{% endblock %}

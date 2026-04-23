@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Assessment Subject Scores</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="back-link mb-4">
+        <a href="{{ url_for('main.add_assessment_score') }}">Add New Assessment Subject Score</a>
+    </div>
+
+    <form method="GET" class="mb-4">
+        </form>
+
+    <form id="delete-form" method="POST" action="{{ url_for('main.delete_multiple_assessment_subject_scores') }}">
+         <button type="submit" class="btn btn-danger mb-3" id="delete-selected-btn" disabled onclick="return confirm('Are you sure you want to delete selected records?');">
+            Delete Selected
+        </button>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>#</th>
+                    <th>Assessment</th>
+                    <th>Academic Session</th>
+                    <th>Subject</th>
+                    <th>Student</th>
+                    <th>Total Marks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td><input type="checkbox" class="delete-checkbox" name="delete_ids" value="{{ score.id }}"></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ score.assessment_name }}</td>
+                    <td>{{ score.academic_session }}</td>
+                    <td>{{ score.subject_name }}</td>
+                    <td>{{ score.first_name }} {{ score.last_name }}</td>
+                    <td>{{ score.total_marks }}</td>
+                    <td>
+                        <a href="{{ url_for('main.edit_assessment_subject_score', id=score.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form action="{{ url_for('main.delete_assessment_subject_score', id=score.id) }}" method="POST" style="display:inline;">
+                            {{ csrf_token }}  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this record?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<script>
+    // Enable/disable delete button based on checkbox selection
+    const deleteButton = document.getElementById('delete-selected-btn');
+    const checkboxes = document.querySelectorAll('.delete-checkbox');
+    const selectAll = document.getElementById('select-all');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            deleteButton.disabled = !Array.from(checkboxes).some(chk => chk.checked);
+        });
+    });
+
+    selectAll.addEventListener('change', () => {
+        checkboxes.forEach(chk => chk.checked = selectAll.checked);
+        deleteButton.disabled = !selectAll.checked;
+    });
+</script>
+{% endblock %}

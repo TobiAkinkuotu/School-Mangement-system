@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="dashboard-container">
+        <h1>Generate Student Results</h1>
+
+        <style>
+            select {
+                color: black;
+                background-color: white;
+            }
+        </style>
+
+        <!-- Form to select student, class, and academic session -->
+        <form action="{{ url_for('main.generate_results') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">  <!-- Use as a variable -->
+
+            <div class="form-group mb-3">
+                <label for="student">Select Student:</label>
+                <select id="student" name="student" class="form-control" required>
+                    <option value="" disabled selected>Select a student</option>
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="class">Select Class</label>
+                <select id="class" name="class" class="form-control" required>
+                    <option value="" disabled selected>Select a class</option>
+                    {% for class in classes %}
+                    <option value="{{ class.id }}">{{ class.class_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <div class="form-group mb-3">
+                <label for="academic_session">Academic Session</label>
+                <select id="academic_session" name="academic_session" class="form-control" required>
+                    <option value="" disabled selected>Select an academic session</option>
+                    {% for session in academic_sessions %}
+                    <option value="{{ academic_session }}">{{ session }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Generate Results</button>
+        </form>
+    </div>
+
+    
+{% endblock %}
+
+            <!-- <div class="form-group mb-3">
+                <label for="class">Select Class</label>
+                <select id="class" name="class" class="form-control" required>
+                    <option value="" disabled selected>Select an academic session</option>
+                    {% for class in classes %}
+                    <option value="{{ class.id }}">{{ class.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="academic_session">Academic Session</label>
+                <select id="academic_session" name="academic_session" class="form-control" required>
+                    <option value="" disabled selected>Select an academic session</option>
+                    {% for session in academic_sessions %}
+                    <option value="{{ academic_session }}">{{ session }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Generate Results</button>
+        </form>
+    </div> -->

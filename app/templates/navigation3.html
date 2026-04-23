@@ -1,0 +1,118 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid justify-content-center">
+        <a class="navbar-brand" href="{{ url_for('main.dashboard') }}">
+            {% if g.school_name %}
+                {{ g.school_name }}
+            {% else %}
+                School Managment Portal 
+            {% endif %}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <!-- Home Link (Visible to All) -->
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" href="{{ url_for('main.index') }}">Home</a>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'admin' %}
+                        <!-- Admin: Full Access -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.students', 'main.teachers', 'main.assign_teachers'] %}active{% endif %}" href="#" id="studentsTeachersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Students & Teachers
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="studentsTeachersDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.classes') }}">Classes</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.students') }}">Students</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.teachers') }}">Teachers</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assign_teachers') }}">Assign Teachers</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.subjects', 'main.assessments'] %}active{% endif %}" href="#" id="subjectsAssessmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Subjects & Assessments
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="subjectsAssessmentsDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.subjects') }}">Subjects</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.add_subject') }}">Add Subject</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assign_subject_to_class') }}">Assign Subject to Class</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.view_class_subjects') }}">View Subject by Class</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assessments') }}">Assessments</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assessment_types') }}">Assessment Types</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assessment_subject_scores') }}">Assessment Scores By Subjects</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.add_assessment_score') }}">Add Assessment Score</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.subjects', 'main.assessments'] %}active{% endif %}" href="#" id="subjectsAssessmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Student Results
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="subjectsAssessmentsDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.generate_results') }}">Generate Students Results</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.upload_signature') }}">Remarks on Results</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.list_students_result') }}">View/Edit/Remove Results</a></li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.fees'] %}active{% endif %}" href="#" id="feesManagementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Fees Management
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="feesManagementDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.fee_components') }}">Fee Components</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.view_class_fees') }}">Class Fees</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.add_fee_component_to_class') }}">Assign Fees to Classes</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.generate_fees') }}">Generate Class Fees</a></li>
+                                <!-- <li><a class="dropdown-item" href="{{ url_for('main.record_payment') }}">Record Payment</a></li> -->
+                            </ul>
+                        </li>
+
+                        <!-- <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.register_school' %}active{% endif %}" href="{{ url_for('main.register_school') }}">Register School</a>
+                        </li> -->
+                        <li class="nav-item">
+                            {% if not current_user.is_authenticated or not current_user.role == 'admin' %}
+                                <a class="nav-link {% if request.endpoint == 'main.register_school' %}active{% endif %}" href="{{ url_for('main.register_school') }}">Register School</a>
+                            {% endif %}
+                        </li>
+
+                    {% elif current_user.role == 'teacher' %}
+                        <!-- Teachers: Subjects & Assessments Only -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.endpoint in ['main.subjects', 'main.assessments'] %}active{% endif %}" href="#" id="subjectsAssessmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Subjects & Assessments
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="subjectsAssessmentsDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('main.subjects') }}">Subjects</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assessments') }}">Assessments</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.assessment_subject_scores') }}">Assessment Subject Scores</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('main.add_assessment_score') }}">Add Assessment Score</a></li>
+                            </ul>
+                        </li>
+
+                    {% elif current_user.role == 'student' %}
+                        <!-- Students: Only Dashboard -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">Student Dashboard</a>
+                        </li>
+                    {% endif %}
+
+                    <!-- Common for All Authenticated Users -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                    </li>
+
+                {% else %}
+                    <!-- Guest User: Only Login -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.login' %}active{% endif %}" href="{{ url_for('main.index') }}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

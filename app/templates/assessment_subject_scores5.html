@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Assessment Subject Scores</h1>
+
+        <div id="form-container" class="mb-4">
+            <h2>Add/Edit Score</h2>
+            <form id="score-form" method="POST" action="/scores">
+                <input type="hidden" id="id" name="id">
+
+                <div class="mb-3">
+                    <label for="assessment_id" class="form-label">Assessment:</label>
+                    <select id="assessment_id" name="assessment_id" class="form-select" required>
+                        <option value="" disabled selected>Select Assessment Type</option>
+                        {% for assessment in assessments %}
+                            <option value="{{ assessment.id }}">{{ assessment.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="academic_session" class="form-label">Academic Session:</label>
+                    <select id="academic_session" name="academic_session" class="form-select" required>
+                        <option value="" disabled selected>Select the Academic Session</option>
+                        {% for assessment in assessments|groupby("academic_session") %}
+                            <option value="{{ assessment.grouper }}">{{ assessment.grouper }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="term" class="form-label">Term:</label>
+                    <select id="term" name="term" class="form-select" required>
+                        <option value="" disabled selected>Select the Term</option>
+                        {% for assessment in assessments|groupby("term") %}
+                            <option value="{{ assessment.grouper }}">{{ assessment.grouper }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="student_id" class="form-label">Student:</label>
+                    <select id="student_id" name="student_id" class="form-select" required>
+                        <option value="" disabled selected>Select a student name</option>
+                        {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3 p-2 rounded" id="student-class-display" style="display: none; background-color: #e9ecef;">
+                    <label class="form-label fw-bold">Student Class:</label>
+                    <span id="student-class-name" class="ms-2"></span>
+                </div>
+                
+
+                <div class="mb-3">
+                    <label class="form-label">Subjects and Marks:</label><br>
+                    <div class="container">
+                        <div id="subject-marks-container">
+                            {% for subject in subjects %}
+                            <div class="row g-3 align-items-center mb-2">
+                                <div class="col-md-4 col-sm-12 d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="subject_marks[{{ subject.id }}][selected]" value="1" class="form-check-input">
+                                        <label class="form-check-label ms-2">{{ subject.name }}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <input type="number" name="subject_marks[{{ subject.id }}][total_marks]" placeholder="Enter Marks" class="form-control">
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <button type="button" class="remove-subject-mark btn btn-danger btn-sm w-100">Remove</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    
+                    <button type="button" id="add-subject-mark" class="btn btn-secondary btn-sm mt-2">Add Subject</button>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" id="cancel-button" class="btn btn-secondary" style="display: none;">Cancel</button>
+            </form>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Assessment</th>
+                    <th>Subject</th>
+                    <th>Student</th>
+                    <th>Total Marks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score.id }}</td>
+                        <td>{{ score.assessment_name }}</td>
+                        <td>{{ score.subject_name }}</td>
+                        <td>{{ score.student_name }}</td>
+                        <td>{{ score.total_marks }}</td>
+                        <td>
+                            <button onclick="editScore({{ score.id }})" class="btn btn-primary btn-sm">Edit</button>
+                            <button onclick="deleteScore({{ score.id }})" class="btn btn-danger btn-sm">Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('add-subject-mark').addEventListener('click', function() {
+            const container = document.getElementById('subject-marks-container');
+            const newRow = document.createElement('div');
+            newRow.className = 'subject-mark-row d-flex align-items-center mb-2';
+            newRow.innerHTML = `
+                <div class="form-check me-2">
+                    <input type="checkbox" name="subject_marks[${Date.now()}][selected]" value="1" class="form-check-input">
+                    <label class="form-check-label">New Subject</label>
+                </div>
+                <input type="number" name="subject_marks[${Date.now()}][total_marks]" placeholder="Marks" class="form-control me-2">
+                <button type="button" class="remove-subject-mark btn btn-danger btn-sm">Remove</button>
+            `;
+            container.appendChild(newRow);
+        });
+
+        document.getElementById('subject-marks-container').addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-subject-mark')) {
+                event.target.parentElement.remove();
+            }
+        });
+
+        function editScore(id) {
+            fetch(`/scores/${id}`)
+                .then(response => response.json())
+                .then(score => {
+                    document.getElementById('id').value = score.id;
+                    document.getElementById('assessment_id').value = score.assessment_id;
+                    document.getElementById('student_id').value = score.student_id;
+                    document.getElementById('cancel-button').style.display = 'inline-block';
+                });
+        }
+
+        function deleteScore(id) {
+            if (confirm('Are you sure you want to delete this score?')) {
+                fetch(`/scores/${id}`, { method: 'DELETE' })
+                    .then(() => location.reload());
+            }
+        }
+
+        document.getElementById('score-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            let subject_marks = {};
+            const subjectRows = document.querySelectorAll('.subject-mark-row');
+            subjectRows.forEach(row => {
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                const subjectId = checkbox.name.match(/\[(\d+)\]/);
+                if (subjectId) {
+                    const id = subjectId[1];
+                    const totalMarksInput = row.querySelector(`input[name="subject_marks[${id}][total_marks]"]`);
+                    if (checkbox.checked) {
+                        subject_marks[id] = {
+                            subject_id: parseInt(id),
+                            total_marks: parseInt(totalMarksInput.value)
+                        };
+                    }
+                }
+            });
+
+            const data = {
+                id: formData.get('id'),
+                assessment_id: formData.get('assessment_id'),
+                student_id: formData.get('student_id'),
+                subject_marks: Object.values(subject_marks),
+            };
+
+            const method = data.id ? 'PUT' : 'POST';
+            const url = data.id ? `/scores/${data.id}` : '/scores';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => location.reload());
+        });
+
+        document.getElementById('cancel-button').addEventListener('click', function() {
+            document.getElementById('score-form').reset();
+            document.getElementById('id').value = '';
+            document.getElementById('cancel-button').style.display = 'none';
+        });
+
+       // Student Class Display Logic
+        document.getElementById('student_id').addEventListener('change', function() {
+            const selectedStudentId = this.value;
+            const studentClassDisplay = document.getElementById('student-class-display');
+            const studentClassName = document.getElementById('student-class-name');
+
+            if (selectedStudentId) {
+                const selectedStudent = {{ students|tojson }}.find(student => student.id == selectedStudentId); // students is now a list of dictionaries
+                if (selectedStudent) {
+                    studentClassName.textContent = selectedStudent.class_name;
+                    studentClassDisplay.style.display = 'block';
+                } else {
+                    studentClassDisplay.style.display = 'none';
+                }
+            } else {
+                studentClassDisplay.style.display = 'none';
+            }
+        });
+
+        // Display student class subject
+        const studentClassSubjectMap = {{ student_class_subject_map | tojson }};
+        const studentsData = {{ students|tojson }};
+        
+        document.getElementById('student_id').addEventListener('change', function() {
+            const selectedStudentId = this.value;
+            const studentClassDisplay = document.getElementById('student-class-display');
+            const studentClassName = document.getElementById('student-class-name');
+            const subjectRows = document.querySelectorAll('.row.g-3.align-items-center.mb-2');
+            const tableRows = document.querySelectorAll('table tbody tr');
+
+            if (selectedStudentId) {
+                const selectedStudent = studentsData.find(student => student.id == selectedStudentId);
+                if (selectedStudent) {
+                    const studentClassId = selectedStudent.class_id;
+                    studentClassName.textContent = selectedStudent.class_name;
+                    studentClassDisplay.style.display = 'block';
+
+                    // Get subjects for selected student's class
+                    const classSubjects = studentClassSubjectMap[studentClassId] || [];
+
+                    subjectRows.forEach(row => {
+                        const subjectInput = row.querySelector('input[name^="subject_marks["]');
+                        if (subjectInput) {
+                            const match = subjectInput.name.match(/\[(\d+)\]/);
+                            if (match) {
+                                const subjectId = parseInt(match[1]);
+                                row.style.display = classSubjects.some(subject => subject.id === subjectId) ? 'flex' : 'none';
+                            }
+                        }
+                    });
+
+                    // Filter Table rows if needed (ensure table rows have a data-student-id attribute)
+                    tableRows.forEach(row => {
+                        const studentId = row.getAttribute('data-student-id');
+                        row.style.display = studentId == selectedStudentId ? 'table-row' : 'none';
+                    });
+                } else {
+                    studentClassDisplay.style.display = 'none';
+                }
+            } else {
+                studentClassDisplay.style.display = 'none';
+                subjectRows.forEach(row => (row.style.display = 'flex'));
+                tableRows.forEach(row => (row.style.display = 'table-row'));
+            }
+        });
+    </script>
+{% endblock %}

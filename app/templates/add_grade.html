@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Add Grade{% endblock %}
+
+{% block content %}
+<h2>Add Grade</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.student_id.label }} {{ form.student_id() }}
+    </div>
+    <div>
+        {{ form.class_id.label }} {{ form.class_id() }}
+    </div>
+    <div>
+        {{ form.grade.label }} {{ form.grade(size=32) }}
+    </div>
+    <button type="submit">Add Grade</button>
+</form>
+{% endblock %}

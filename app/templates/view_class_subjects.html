@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-3">Class Subjects</h2>
+
+        {% if grouped_class_subjects %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Class</th>
+                        <th>Subjects</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class_name, subjects in grouped_class_subjects.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ class_name }}</td>
+                        <td>{{ subjects | join(', ') }}</td>
+                        <td>
+                            <a href="{{ url_for('main.edit_class_subject', class_name=class_name) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{{ url_for('main.delete_class_subject', class_name=class_name) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No subjects assigned to any class yet.</p>
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="{{ url_for('main.assign_subject_to_class') }}" class="btn btn-primary">Assign More Subjects</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

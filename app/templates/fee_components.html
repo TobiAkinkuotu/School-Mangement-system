@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Fee Components - School Fees Management{% endblock %}
+
+{% block content %}
+    <h1>Fee Components</h1>
+    <a href="{{ url_for('main.add_fee_component') }}" class="btn btn-primary mb-3">Add Fee Component</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>School</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in components %}
+                <tr>
+                    <td>{{ component.id }}</td>
+                    <td>{{ component.name }}</td>
+                    <td>{{ component.description }}</td>
+                    <td>{{ component.school.name }}</td>
+                    <td>
+                        <a href="{{ url_for('main.edit_fee_component', id=component.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ url_for('main.delete_fee_component', id=component.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this fee component?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

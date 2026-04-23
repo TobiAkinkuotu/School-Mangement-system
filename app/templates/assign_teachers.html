@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container h-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
+        <h1 class="text-center mb-4">Assign Teachers to Class</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.class_id.label(class="form-label") }}
+                {{ form.class_id(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.teacher_ids.label(class="form-label") }}
+                {{ form.teacher_ids(class="form-control js-example-basic-multiple", multiple=true) }}
+            </div>
+
+            <div class="d-grid">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('main.classes') }}" class="btn btn-secondary">Back to Classes</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({
+            placeholder: "Select teachers",
+            allowClear: true
+        });
+    });
+</script>
+{% endblock %}

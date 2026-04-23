@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Include a flash message-->
+{% if message %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endif %}
+
+    <div class="dashboard-container">
+        <h3>Debug Info:</h3>
+<pre>{{ debug_student }}</pre>
+        <h1>Student Dashboard</h1>
+
+        <div class="student-info">
+            <h2>Student Information</h2>
+            <table class="info-table">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ student.first_name }} {{ student.last_name }}</td>  </tr>
+                <tr>
+                    <th>Student ID</th>
+                    <td>{{ student.id }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ student.contact_email or "N/A" }}</td>  </tr>
+                <tr>
+                    <th>Phone Number</th>
+                    <td>{{ student.phone_number or "N/A" }}</td> </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{ student.address or "N/A" }}</td> </tr>
+                <tr>
+                    <th>Date of Birth</th>
+                    <td>{{ student.date_of_birth.strftime('%Y-%m-%d') if student.date_of_birth else "N/A" }}</td> </tr>
+            </table>
+        </div>
+
+        <div class="enrolled-classes">
+            <h2>Enrolled Classes</h2>
+            <table class="classes-table">
+                <thead>
+                    <tr>
+                        <th>Class Name</th>
+                        <th>Teacher</th>
+                        <th>Schedule</th>
+                        <th>Room</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if student.classes %}  {% for class in student.classes %}
+                            <tr>
+                                <td>{{ class.name }}</td>
+                                <td>{{ class.teacher.name if class.teacher else "N/A" }}</td>  <td>{{ class.schedule or "N/A" }}</td>  <td>{{ class.room or "N/A" }}</td>  </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4">No classes enrolled.</td></tr>  {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="grades">
+            <h2>Grades</h2>
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if student.grades %}  {% for grade in student.grades %}
+                            <tr>
+                                <td>{{ grade.subject.name if grade.subject else "N/A" }}</td>  <td>{{ grade.grade or "N/A" }}</td>  <td>{{ grade.remarks or "N/A" }}</td>  </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="3">No grades available.</td></tr>  {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="results">
+            <h2>Results</h2>
+            {% if student.result_url %}
+                <p>Your results are ready! <a href="{{ student.result_url }}" target="_blank">View Results</a></p>
+            {% else %}
+                <p>No results available yet.</p>
+            {% endif %}
+        
+            <h3>Assessment Records</h3>
+            <table class="grades-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>CA1</th>
+                        <th>CA2</th>
+                        <th>Exam</th>
+                        <th>Final Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment, subject_name in assessments %}
+                        <tr>
+                            <td>{{ subject_name }}</td>
+                            <td>{{ assessment.CA1 }}</td>
+                            <td>{{ assessment.ca2 }}</td>
+                            <td>{{ assessment.examination }}</td>
+                            <td>{{ assessment.final_grade }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5">No assessments found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

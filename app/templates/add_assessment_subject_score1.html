@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Add Assessment Subject Score</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="back-link">
+        <a href="{{ url_for('main.assessment_subject_scores') }}">View Assessment Subject Scores</a>
+    </div>
+    <form method="POST" action="{{ url_for('main.add_assessment_score') }}">
+        
+        <div class="form-group mb-3">
+            <label for="student_id">Student</label>
+            <select id="student_id" name="student_id" class="form-control" required>
+                <option value="" disabled selected>Select a student</option>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="class_id">Class</label>
+            <select id="class_id" name="class_id" class="form-control" required>
+                <option value="" disabled selected>Select a class</option>
+                {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="academic_session">Academic Session</label>
+            <select id="academic_session" name="academic_session" class="form-control" required>
+                <option value="" disabled selected>Select an academic session</option>
+                {% for session in academic_sessions %}
+                <option value="{{ session }}">{{ session }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="assessment_id">Assessment</label>
+            <select id="assessment_id" name="assessment_id" class="form-control" required>
+                <option value="" disabled selected>Select an assessment</option>
+                {% for assessment in assessments %}
+                <option value="{{ assessment.id }}">{{ assessment.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="subject_id">Subject</label>
+            <select id="subject_id" name="subject_id" class="form-control" required>
+                <option value="" disabled selected>Select a subject</option>
+                {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label for="total_marks">Total Marks</label>
+            <input type="number" id="total_marks" name="total_marks" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Score</button>
+    </form>
+</div>
+
+<!-- Add Student-Class Mapping -->
+<script>
+    const studentClassMap = {
+        {% for student in students %}
+            "{{ student.id }}": "{{ student.class_id }}",
+        {% endfor %}
+    };
+
+    document.getElementById("student_id").addEventListener("change", function () {
+        const selectedStudentId = this.value;
+        const classDropdown = document.getElementById("class_id");
+
+        // Set the class dropdown based on the selected student
+        if (studentClassMap[selectedStudentId]) {
+            classDropdown.value = studentClassMap[selectedStudentId];
+        } else {
+            classDropdown.value = ""; // Clear if no mapping found
+        }
+    });
+</script>
+{% endblock %}

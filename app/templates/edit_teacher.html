@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Teacher</h2>
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.first_name.label }} {{ form.first_name(class="form-control") }}
+    </div>
+    <div>
+        {{ form.last_name.label }} {{ form.last_name(class="form-control") }}
+    </div>
+    <div>
+        {{ form.email.label }} {{ form.email(class="form-control") }}
+    </div>
+    <div>
+        {{ form.hire_date.label }} {{ form.hire_date(class="form-control") }}
+    </div>
+    <div>
+        {{ form.phone_number.label }} {{ form.phone_number(class="form-control") }}
+    </div>
+    <div>
+        {{ form.qualification.label }} {{ form.qualification(class="form-control") }}
+    </div>
+    <div>
+        {{ form.address.label }} {{ form.address(class="form-control") }}
+    </div>
+    <div>
+        {{ form.date_of_birth.label }} {{ form.date_of_birth(class="form-control") }}
+    </div>
+    <div>
+        {{ form.gender.label }} {{ form.gender(class="form-control") }}
+    </div>
+    <div>
+        {{ form.subject.label }} {{ form.subject(class="form-control", multiple=True) }}
+    </div>
+    <div>
+        {{ form.school_id.label }} {{ form.school_id(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Update Teacher</button>
+</form>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Class Fee Components{% endblock %}
+
+{% block content %}
+<h1>Class Fee Components</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Class Name</th>
+            <th>Fee Component</th>
+            <th>Amount (₦)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for class_name, components in grouped_fees.items() %}
+        <tr>
+            <td rowspan="{{ components|length }}">{{ components[0].id }}</td>
+            <td rowspan="{{ components|length }}">{{ class_name }}</td>
+            <td>{{ components[0].fee_component.name }}</td>
+            <td>{{ components[0].amount }}</td>
+        </tr>
+        {% for component in components[1:] %}
+        <tr>
+            <td>{{ component.fee_component.name }}</td>
+            <td>{{ component.amount }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

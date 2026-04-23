@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Upload Signature and Remarks</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.student_id.label }}
+            {{ form.student_id(class="form-control") }}
+            {% for error in form.student_id.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.student_class.label }}
+            {{ form.student_class(class="form-control") }}
+            {% for error in form.student_class.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.academic_session.label }}
+            {{ form.academic_session(class="form-control") }}
+            {% for error in form.academic_session.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.term.label }}
+            {{ form.term(class="form-control") }}
+            {% for error in form.term.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.teacher_remark.label }}
+            {{ form.teacher_remark(class="form-control", rows=5) }}
+            {% for error in form.teacher_remark.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.principal_remark.label }}
+            {{ form.principal_remark(class="form-control", rows=5) }}
+            {% for error in form.principal_remark.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.signature.label }}
+            {{ form.signature(class="form-control-file") }}
+            {% for error in form.signature.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+
+{% endblock %}

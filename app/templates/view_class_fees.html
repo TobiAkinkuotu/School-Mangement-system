@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}View Class Fees - School Fees Management{% endblock %}
+
+{% block content %}
+   <!-- Display the list of classes -->
+<ul>
+    <h1>Fee Components for {{ selected_class.class_name }}</h1>
+</ul>
+    <a href="{{ url_for('main.add_fee_component_to_class') }}" class="btn btn-primary mb-3">Add Fee Component</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Fee Component</th>
+                <th>Amount (₦)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in class_fee_components %}
+                <tr>
+                    <td>{{ component.fee_component.name }}</td>
+                    <td>₦{{ component.amount }}</td>
+                    <td>
+                        <form action="{{ url_for('main.remove_fee_component_from_class', class_fee_component_id=component.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this fee component?')">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

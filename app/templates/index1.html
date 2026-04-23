@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="landing-container">
+    <div class="hero">
+        <h1>Welcome to School Management Portal</h1>
+        <p>Your trusted platform for managing student success, teacher guidance, and educational progress all in one place.</p>
+        {% if is_authenticated %}
+            <a href="{{ url_for('main.logout') }}" class="cta-button">Logout</a>
+        {% else %}
+            <a href="{{ url_for('main.login') }}" class="cta-button">Admin Login</a>
+        {% endif %}
+    </div>
+
+    <section class="features">
+        <div class="feature">
+            <h3>Student Profiles</h3>
+            <p>Track and manage profiles for all aspiring learners, complete with personal and academic information.</p>
+        </div>
+        <div class="feature">
+            <h3>Classes & Attendance</h3>
+            <p>Manage classes, schedules, and keep accurate attendance records for each student’s journey.</p>
+        </div>
+        <div class="feature">
+            <h3>Grades & Performance</h3>
+            <p>Monitor academic performance and generate detailed grade reports for tracking success.</p>
+        </div>
+        <div class="feature">
+            <h3>Teacher Management</h3>
+            <p>Keep track of teacher profiles, including subject expertise, schedules, and contact information.</p>
+        </div>
+        <div class="feature">
+            <h3>Comprehensive Reporting</h3>
+            <p>Generate and export reports in Microsoft Excel and Word formats for easy data sharing.</p>
+        </div>
+    </section>
+</div>
+<script>
+async function getRequest(url = '') {
+    const response = await fetch(url, {
+        method: 'GET',
+        cache: 'no-cache'
+    })
+    return response.json()
+}
+document.addEventListener('DOMContentLoaded', function () {
+    let url = document.location
+    let route = "/flaskwebgui-keep-server-alive"
+    let interval_request = 3 * 1000 //sec
+    function keep_alive_server() {
+        getRequest(url + route)
+            .then(data => console.log(data))
+    }
+    setInterval(keep_alive_server, interval_request)()
+})
+</script>
+{% endblock %}

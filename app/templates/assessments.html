@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h1>Assessments</h1>
+<a href="{{ url_for('main.add_assessment') }}" class="btn btn-primary">Add Assessment</a>
+<table class="table">
+    <thead>
+        <tr>
+            <!-- <th>ID</th> -->
+            <th>Name</th>
+            <th>Class</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Academic Session</th>
+            <th>Term</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for assessment in assessments %}
+        <tr>
+            <td>{{ assessment.name }}</td>
+
+                <td>{{ assessment.class_names if assessment.class_names else 'N/A' }}</td>
+                <td>{{ assessment.assessment_type_name }}</td> 
+                <td>{{ assessment.date }}</td>
+                <td>{{ assessment.academic_session }}</td>
+                <td>{{ assessment.term }}</td>
+            <td>
+                <a href="{{ url_for('main.edit_assessment', assessment_id=assessment.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{{ url_for('main.delete_assessment', assessment_id=assessment.id) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">  <!-- Use as a variable -->
+
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+
+</script>
+{% endblock %}

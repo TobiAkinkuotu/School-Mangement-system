@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Add flash message for error -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<h1>Add Assessment</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.name.label }}
+        {{ form.name(class="form-control") }}
+    </div><br>
+    <div class="form-group">
+        {{ form.date.label }}
+        {{ form.date(class="form-control") }}
+    </div><br>
+    <div class="form-group">
+        {{ form.assessment_type.label }}
+        {{ form.assessment_type(class="form-control") }}
+    </div><br>
+    <div class="form-group">
+        {{ form.class_id.label }}
+        {{ form.class_id(class="form-control") }}
+    </div><br>
+    <div class="form-group">
+        {{ form.academic_session.label }}
+        {{ form.academic_session(class="form-control") }}
+    </div><br>
+    <div class="form-group">
+        {{ form.term.label }}
+        {{ form.term(class="form-control") }}
+    </div><br>
+    <button type="submit" class="btn btn-success">Add Assessment</button>
+</form>
+{% endblock %}

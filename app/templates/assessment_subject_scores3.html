@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Assessment Subject Scores</h1>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Back Link -->
+    <div class="back-link mb-4">
+        <a href="{{ url_for('main.add_assessment_score') }}">Add New Assessment Subject Score</a>
+    </div>
+
+    <!-- Search/Filter Form -->
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <!-- Dropdown Button for Assessment -->
+            <div class="col-md-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownAssessment" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Assessment
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownAssessment">
+                        <li><a class="dropdown-item" href="?assessment=">All Assessments</a></li>
+                        {% for assessment in assessments %}
+                        <li><a class="dropdown-item" href="?assessment={{ assessment.id }}">{{ assessment.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dropdown Button for Academic Session -->
+            <div class="col-md-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownAcademicSession" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Academic Session
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownAcademicSession">
+                        <li><a class="dropdown-item" href="?academic_session=">All Sessions</a></li>
+                        {% for session in academic_sessions %}
+                        <li><a class="dropdown-item" href="?academic_session={{ session }}">{{ session }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dropdown Button for Subject -->
+            <div class="col-md-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownSubject" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Subject
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownSubject">
+                        <li><a class="dropdown-item" href="?subject=">All Subjects</a></li>
+                        {% for subject in subjects %}
+                        <li><a class="dropdown-item" href="?subject={{ subject.id }}">{{ subject.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dropdown Button for Student -->
+            <div class="col-md-2">
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="dropdownStudent" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Student
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownStudent">
+                        <li><a class="dropdown-item" href="?student=">All Students</a></li>
+                        {% for student in students %}
+                        <li><a class="dropdown-item" href="?student={{ student.id }}">{{ student.first_name }} {{ student.last_name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="col-md-2">
+                <a href="{{ url_for('main.assessment_subject_scores') }}" class="btn btn-secondary w-100">Reset</a>
+            </div>
+        </div>
+    </form>
+
+    <form id="delete-form" method="POST" action="{{ url_for('main.delete_multiple_assessment_subject_scores') }}">
+        {{ csrf_token }}  <button type="submit" class="btn btn-danger mb-3" id="delete-selected-btn" disabled onclick="return confirm('Are you sure you want to delete selected records?');">
+            Delete Selected
+        </button>
+
+        <!-- Table to display the filtered results -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th>
+                    <th>#</th>
+                    <th>Assessment</th>
+                    <th>Academic Session</th>
+                    <th>Subject</th>
+                    <th>Student</th>
+                    <th>Total Marks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td><input type="checkbox" class="delete-checkbox" name="delete_ids" value="{{ score.id }}"></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ score.assessment_name }}</td>
+                    <td>{{ score.academic_session }}</td>
+                    <td>{{ score.subject_name }}</td>
+                    <td>{{ score.first_name }} {{ score.last_name }}</td>
+                    <td>{{ score.total_marks }}</td>
+                    <td>
+                        <a href="{{ url_for('main.edit_assessment_subject_scores', id=score.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<!--  -->
+{% endblock %}

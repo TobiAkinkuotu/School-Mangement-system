@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('main.index') }}">Home</a>
+        <a href="{{ url_for('main.students') }}">Students</a>
+        <a href="{{ url_for('main.teachers') }}">Teachers</a>
+        <a href="{{ url_for('main.classes') }}">Classes</a>
+        <a href="{{ url_for('main.grades') }}">Grades</a>
+        <a href="{{ url_for('main.attendance') }}">Attendance</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('main.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('main.login') }}">Login</a>
+        {% endif %}
+    </nav>
+    
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <footer>
+        <p>&copy; {{ year }} School Management Portal | <a href="{{ url_for('main.index') }}">Home</a></p>
+    </footer>
+</body>
+</html>

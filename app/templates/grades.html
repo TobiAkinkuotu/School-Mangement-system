@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Grades</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student ID</th>
+            <th>Class ID</th>
+            <th>Grade</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grade in grades %}
+        <tr>
+            <td>{{ grade.id }}</td>
+            <td>{{ grade.student_id }}</td>
+            <td>{{ grade.class_id }}</td>
+            <td>{{ grade.grade }}</td>
+            <td>
+                <a href="{{ url_for('main.edit_grade', grade_id=grade.id) }}">Edit</a> |
+                <a href="{{ url_for('main.delete_grade', grade_id=grade.id) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('main.add_grade') }}" class="cta-button">Add New Grade</a>
+{% endblock %}

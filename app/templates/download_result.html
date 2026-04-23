@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %} Download Student Result Sheet {% endblock %}
+
+
+{% block content %}
+
+    <title>Download Student Result Sheet</title>
+    <style>
+        /* body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        } */
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download Student Result Sheet</h1>
+        <form id="downloadForm">
+            <label for="student_id">Student ID:</label>
+            <input type="number" id="student_id" name="student_id" required>
+            <button type="submit">Download Result Sheet</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const studentId = document.getElementById('student_id').value;
+            if (studentId) {
+                window.location.href = `/download_result_sheet/${studentId}`;
+            } else {
+                alert('Please enter a valid Student ID.');
+            }
+        });
+    </script>
+{% endblock %}

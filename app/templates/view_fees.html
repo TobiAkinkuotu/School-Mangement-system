@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}View Class Fees - School Fees Management{% endblock %}
+
+{% block content %}
+    <h1>View Class Fees</h1>
+
+    <form method="GET" action="{{ url_for('main.view_class_fees') }}">
+        <div class="form-group">
+            <label for="class_id">Select Class:</label>
+            <select class="form-control" id="class_id" name="class_id" required>
+                <option value="">-- Select a Class --</option>
+                {% for class in classes %}
+                    <option value="{{ class.id }}" {% if selected_class_id == class.id %}selected{% endif %}>
+                        {{ class.class_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="academic_year">Academic Year:</label>
+            <select class="form-control" id="academic_year" name="academic_year" required>
+                <option value="">-- Select Academic Year --</option>
+                {% for year in academic_years %}  {# Iterate through the unique academic years #}
+                    <option value="{{ year }}" {% if selected_academic_year == year %}selected{% endif %}>
+                        {{ year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="term">Term:</label>
+            <select class="form-control" id="term" name="term">
+                <option value="">-- Select a Term --</option>
+                <option value="First Term" {% if selected_term == "First Term" %}selected{% endif %}>First Term</option>
+                <option value="Second Term" {% if selected_term == "Second Term" %}selected{% endif %}>Second Term</option>
+                <option value="Third Term" {% if selected_term == "Third Term" %}selected{% endif %}>Third Term</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">View Fees</button>
+    </form>
+
+    {% if fees %}
+        <h2>Fees for Class: {{ selected_class.class_name }} ({{ selected_academic_year }}, {{ selected_term }})</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Fee Component</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fee in fees %}
+                    <tr>
+                        <td>{{ fee.fee_component.name }}</td>  {# Access fee_component.name #}
+                        <td>₦{{ fee.amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif selected_class %}
+        <p>No fees found for this class in the selected academic year and term.</p>
+    {% endif %}
+
+{% endblock %}

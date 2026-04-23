@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Assessment</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.name.label }}
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.date.label }}
+        {{ form.date(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.assessment_type.label }}
+        {{ form.assessment_type(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.class_ids.label }}
+        <select name="class_ids" class="form-control" multiple>
+            {% for value, label in form.class_ids.choices %}
+                <option value="{{ value }}" {% if value in form.class_ids.data %} selected {% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <small>Hold Ctrl/Cmd to select multiple classes</small>
+    </div>
+    <div class="form-group">
+        {{ form.academic_session.label }}
+        {{ form.academic_session(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.term.label }}
+        {{ form.term(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-warning">Update Assessment</button>
+</form>
+{% endblock %}

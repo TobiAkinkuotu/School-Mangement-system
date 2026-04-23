@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Add Class{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Add Class</h2>
+    <form method="POST" class="needs-validation" novalidate>
+        {{ form.hidden_tag() }}
+        <!-- Class Name -->
+        <div class="mb-3">
+            {{ form.class_name.label(class="form-label") }}
+            {{ form.class_name(class="form-control", placeholder="Enter class name") }}
+            {% if form.class_name.errors %}
+                <div class="text-danger">
+                    {{ form.class_name.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Class Level -->
+        <div class="mb-3">
+            {{ form.class_level.label(class="form-label") }}
+            {{ form.class_level(class="form-control", placeholder="Enter class level") }}
+            {% if form.class_level.errors %}
+                <div class="text-danger">
+                    {{ form.class_level.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Class Category -->
+        <div class="mb-3">
+            {{ form.class_category.label(class="form-label") }}
+            {{ form.class_category(class="form-select") }}
+            {% if form.class_category.errors %}
+                <div class="text-danger">
+                    {{ form.class_category.errors[0] }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Teachers -->
+        <div class="mb-3">
+            {{ form.teacher_ids.label(class="form-label") }}
+            {{ form.teacher_ids(class="form-select", multiple=True) }}
+            {% if form.teacher_ids.errors %}
+                <div class="text-danger">
+                    {{ form.teacher_ids.errors[0] }}
+                </div>
+            {% endif %}
+            <small class="text-muted">Hold down Ctrl (Cmd on Mac) to select multiple teachers.</small>
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Add Class</button>
+    </form>
+</div>
+{% endblock %}

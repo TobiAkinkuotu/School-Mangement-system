@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-3">Assign Subjects to Class</h2>
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}  <!-- CSRF token -->
+            
+            <!-- Class Selection -->
+            <div class="mb-3">
+                {{ form.class_id.label(class="form-label fw-semibold") }}
+                {{ form.class_id(class="form-select") }}
+                {% if form.class_id.errors %}
+                    <div class="text-danger small">{{ form.class_id.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Subject Selection (Checkboxes) -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Select Subjects</label>
+                <div class="border rounded p-2">
+                    <div class="form-check">
+                        <input type="checkbox" id="select_all" class="form-check-input">
+                        <label for="select_all" class="form-check-label fw-bold">Select All</label>
+                    </div>
+                    {% for subject in subjects %}
+                    <div class="form-check">
+                        <input type="checkbox" name="subjects" value="{{ subject.id }}" id="subject_{{ subject.id }}" class="form-check-input">
+                        <label for="subject_{{ subject.id }}" class="form-check-label">{{ subject.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary w-100">Assign</button>
+        </form>
+
+        <!-- Back Button -->
+        <div class="text-center mt-3">
+            <a href="{{ url_for('main.subjects') }}" class="btn btn-outline-secondary btn-sm">Back to Subjects</a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for "Select All" Feature -->
+<script>
+    document.getElementById("select_all").addEventListener("change", function() {
+        document.querySelectorAll("input[name='subjects']").forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+</script>
+{% endblock %}

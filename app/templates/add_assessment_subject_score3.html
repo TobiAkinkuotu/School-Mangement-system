@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Add Assessment Subject Score</h1>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Back Link -->
+    <div class="back-link mb-4">
+        <a href="{{ url_for('main.assessment_subject_scores') }}">View Assessment Subject Scores</a>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" action="{{ url_for('main.add_assessment_score') }}">
+        
+        <!-- Student Dropdown -->
+        <div class="form-group mb-3">
+            <label for="student_id">Student</label>
+            <select id="student_id" name="student_id" class="form-control" required>
+                <option value="" disabled selected>Select a student</option>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Class Dropdown -->
+        <div class="form-group mb-3">
+            <label for="class_id">Class</label>
+            <select id="class_id" name="class_id" class="form-control" required>
+                <option value="" disabled selected>Select a class</option>
+                {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Academic Session Dropdown -->
+        <div class="form-group mb-3">
+            <label for="academic_session">Academic Session</label>
+            <select id="academic_session" name="academic_session" class="form-control" required>
+                <option value="" disabled selected>Select an academic session</option>
+                {% for session in academic_sessions %}
+                <option value="{{ session }}">{{ session }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Assessment and Subject Table -->
+        <div class="form-group mb-4">
+            <h3>Assessments and Subjects</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Assessment</th>
+                        <th>Subject</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assessment in assessments %}
+                    {% for subject in subjects %}
+                    <tr>
+                        {% if loop.index0 == 0 %}
+                        <td rowspan="{{ subjects|length }}">{{ assessment.name }}</td>
+                        {% endif %}
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" 
+                                       id="subject_{{ assessment.id }}_{{ subject.id }}" 
+                                       name="subjects_{{ assessment.id }}" 
+                                       value="{{ subject.id }}">
+                                <label class="form-check-label" for="subject_{{ assessment.id }}_{{ subject.id }}">{{ subject.name }}</label>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" 
+                                   name="score_{{ assessment.id }}_{{ subject.id }}" 
+                                   placeholder="Enter score" 
+                                   min="0" max="100" 
+                                   disabled>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Scores</button>
+    </form>
+</div>
+
+<!-- Enable/Disable Score Input -->
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const scoreInput = document.querySelector(`input[name="score_${this.id.split('_')[1]}_${this.value}"]`);
+            if (this.checked) {
+                scoreInput.removeAttribute('disabled');
+            } else {
+                scoreInput.setAttribute('disabled', true);
+                scoreInput.value = ''; // Clear score when unchecked
+            }
+        });
+    });
+</script>
+
+<!-- Student-Class Mapping -->
+<script>
+    const studentClassMap = {
+        {% for student in students %}
+        "{{ student.id }}": "{{ student.class_id }}",
+        {% endfor %}
+    };
+
+    document.getElementById("student_id").addEventListener("change", function () {
+        const selectedStudentId = this.value;
+        const classDropdown = document.getElementById("class_id");
+
+        if (studentClassMap[selectedStudentId]) {
+            classDropdown.value = studentClassMap[selectedStudentId];
+        } else {
+            classDropdown.value = ""; // Reset if no mapping found
+        }
+    });
+</script>
+{% endblock %}

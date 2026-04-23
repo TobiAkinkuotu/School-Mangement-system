@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-3">Edit Subjects for {{ class_obj.name }}</h2>
+        
+        <form method="POST">
+           
+            
+            <div class="mb-3">
+                <label class="form-label">Select Subjects</label>
+                <div class="list-group">
+                    {% for subject in subjects %}
+                    <div class="list-group-item">
+                        <input type="checkbox" name="subjects" value="{{ subject.id }}" id="subject_{{ subject.id }}" 
+                            {% if subject.id in selected_subjects %}checked{% endif %}>
+                        <label for="subject_{{ subject.id }}">{{ subject.name }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Update Subjects</button>
+            </div>
+        </form>
+
+        <div class="mt-3 text-center">
+            <form action="{{ url_for('main.delete_class_subject', class_name=class_obj.name) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete all subjects for this class?');">
+                <button type="submit" class="btn btn-danger">Delete All Subjects</button>
+            </form>
+        </div>
+        
+        <div class="mt-3 text-center">
+            <a href="{{ url_for('main.view_class_subjects') }}" class="btn btn-outline-secondary">Back to Class Subjects</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

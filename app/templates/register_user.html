@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Register User</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.username.label }} {{ form.username(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }} {{ form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.role.label }} {{ form.role(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.school_id.label }} {{ form.school_id(class="form-control") }}
+        </div>
+
+        <!-- Student Selection (Visible only if role is student) -->
+        <div id="student-section" class="form-group" style="display: none;">
+            {{ form.student_id.label }} {{ form.student_id(class="form-control") }}
+        </div>
+
+        <!-- Teacher Selection (Visible only if role is teacher) -->
+        <div id="teacher-section" class="form-group" style="display: none;">
+            {{ form.teacher_id.label }} {{ form.teacher_id(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+    <script>
+        // Show/hide student and teacher sections based on selected role
+        const roleSelect = document.getElementById("role");
+        const studentSection = document.getElementById("student-section");
+        const teacherSection = document.getElementById("teacher-section");
+
+        roleSelect.addEventListener("change", function () {
+            if (roleSelect.value === "student") {
+                studentSection.style.display = "block";
+                teacherSection.style.display = "none";
+            } else if (roleSelect.value === "teacher") {
+                studentSection.style.display = "none";
+                teacherSection.style.display = "block";
+            } else {
+                studentSection.style.display = "none";
+                teacherSection.style.display = "none";
+            }
+        });
+
+        // Trigger change event on page load to set initial visibility
+        roleSelect.dispatchEvent(new Event("change"));
+    </script>
+{% endblock %}

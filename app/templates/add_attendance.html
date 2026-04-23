@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Add Attendance{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow p-4">
+        <h2 class="text-center mb-3">Add Attendance</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- Student Selection -->
+            <div class="mb-3">
+                {{ form.student_id.label(class="form-label") }}
+                {{ form.student_id(class="form-control") }}
+                {% if form.student_id.errors %}
+                    <div class="text-danger">
+                        {% for error in form.student_id.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Days Present -->
+            <div class="mb-3">
+                {{ form.days_present.label(class="form-label") }}
+                {{ form.days_present(class="form-control") }}
+                {% if form.days_present.errors %}
+                    <div class="text-danger">
+                        {% for error in form.days_present.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Total Days Opened -->
+            <div class="mb-3">
+                {{ form.total_days_opened.label(class="form-label") }}
+                {{ form.total_days_opened(class="form-control") }}
+                {% if form.total_days_opened.errors %}
+                    <div class="text-danger">
+                        {% for error in form.total_days_opened.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

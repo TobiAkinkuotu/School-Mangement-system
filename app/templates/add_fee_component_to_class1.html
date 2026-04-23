@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Add Fee Components to Class - School Fees Management{% endblock %}
+
+{% block content %}
+<h1>Add Fee Components to Class</h1>
+<form method="POST" action="{{ url_for('main.add_fee_component_to_class') }}">
+    <!-- CSRF Token -->
+
+
+    <!-- Class Selection -->
+    <div class="form-group">
+        <label for="class_id">Class</label>
+        <select class="form-control" id="class_id" name="class_id" required>
+            <!-- Placeholder Option -->
+            <option value="" disabled selected>Select a class</option>
+            {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.class_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Fee Components -->
+    <h2>Fee Components</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Fee Component</th>
+                <th>Amount (₦)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in components %}
+            <tr>
+                <!-- Checkbox for Selecting Component -->
+                <td>
+                    <input type="checkbox" name="selected_components" value="{{ component.id }}" id="component_{{ component.id }}">
+                </td>
+                <!-- Component Name -->
+                <td>
+                    <label for="component_{{ component.id }}">{{ component.name }}</label>
+                </td>
+                <!-- Input field for Amount -->
+                <td>
+                    <input type="number" step="0.01" class="form-control" name="amount_{{ component.id }}" placeholder="Enter amount">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Submit and Cancel Buttons -->
+    <button type="submit" class="btn btn-primary">Add Fee Components</button>
+    <a href="{{ url_for('main.fee_components') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

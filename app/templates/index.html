@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}School Management Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+
+{% if current_user.is_authenticated %}
+    <script>
+        var role = "{{ current_user.role }}";  // Get role from Flask
+        if (role === "admin") {
+            window.location.href = "{{ url_for('main.dashboard') }}";
+        } else if (role === "teacher") {
+            window.location.href = "{{ url_for('main.teacher_dashboard') }}";
+        } else if (role === "student") {
+            window.location.href = "{{ url_for('main.student_dashboard') }}";
+        } else {
+            window.location.href = "{{ url_for('main.index') }}";  // Default redirect
+        }
+    </script>
+{% endif %}
+
+<div class="landing-container">
+    <div class="background-image"> 
+        <div class="hero">
+            <h1>Welcome to School Management Portal</h1>
+            <p>Your trusted platform for managing student success, teacher guidance, and educational progress all in one place.</p>
+            <p>Please login to access your school platform. </p>
+            <p>If your school does not have an account, click <a href="{{ url_for('main.register_school') }}">here</a> to register your school first.</p>
+
+            <div class="login-form-container">  <h2>Login</h2>
+                <form id="login-form" method="POST" action="{{ url_for('main.index') }}">
+                    {{ form.csrf_token }}
+                    <div class="form-group">
+                        {{ form.username.label(class="form-label") }}
+                        {{ form.username(class="form-control", placeholder="Username", required=true) }}
+                        {% if form.username.errors %}
+                            <ul class="errors">
+                                {% for error in form.username.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control", placeholder="Password", required=true, type="password") }}
+                        {% if form.password.errors %}
+                            <ul class="errors">
+                                {% for error in form.password.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="cta-button">Login</button>
+                </form>
+                {% if error %}  <p class="error-message">{{ error }}</p>
+                {% endif %}
+            </div>
+        </div> 
+
+
+    </div>
+</div>
+<style>
+    /* .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('static/images/students.jpg');
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        opacity: 0.5; */
+        /* margin-top: 250px;
+        margin-bottom: 4px; */
+
+    }
+</style>
+<style>
+    /* body, html { */
+        /* background-color: aliceblue; */
+        /* background-image: url('static/images/students.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat; */
+        /* z-index: -1; */
+        /* opacity: 0.5; */
+    /* height: 100%;
+    margin: 0; */
+    
+/* } */
+
+    .landing-container {
+        /* background-image: url('static/images/students.jpg');
+        background-size: cover; */
+        display: flex;
+        flex-direction: column;
+        /* min-height: 100vh; Ensure container takes full viewport height */
+        font-family: sans-serif;
+        overflow: hidden;
+        padding: 1px;
+    }
+
+    body {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('static/images/children.jpg');
+        background-size: cover;
+        background-position: center;
+        /* z-index: -1;
+        opacity: 0.5; */
+    }
+
+    .hero {
+        text-align: center;
+        padding: 30px 20px; /* Increased padding for better spacing */
+        color: #333; /* Darker text color for contrast against background */
+        position: relative; /* Needed for proper z-index on the form */
+        z-index: 1; /* Ensure hero content is above image */
+        background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background
+        /* margin-bottom: 20px; */
+    }
+
+    .login-form-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 20px auto; /* Center the form */
+        max-width: 400px; /* Set a maximum width for the form */
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .cta-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff; /* Example blue color */
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        margin-top: 10px; /* Add margin to the button */
+    }
+
+    /* .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 20px;
+        background-color: #f8f9fa; 
+        position: relative;
+        z-index: 1;
+    } */
+
+    /* .feature {
+        width: 30%; 
+        margin: 20px;
+        text-align: center;
+    }
+
+    .feature h3 {
+        margin-bottom: 10px;
+    } */
+
+    .error-message {
+        color: red;
+        margin-top: 10px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature {
+            width: 45%; /* Two features per row on smaller screens */
+        }
+        .hero {
+            padding: 50px 10px; /* Adjust padding for smaller screens */
+        }
+    }
+
+    @media (max-width: 500px) {
+        .feature {
+            width: 90%; /* One feature per row on very small screens */
+        }
+    }
+</style>
+
+<script>
+    // You can also handle redirection here
+    document.addEventListener("DOMContentLoaded", function() {
+        if ("{{ current_user.is_authenticated }}" === "True") {
+            window.location.href = "{{ url_for('main.dashboard') }}";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container h-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
+        <h1 class="text-center mb-4">Edit Student</h1>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.first_name.label(class="form-label") }}
+                {{ form.first_name(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.last_name.label(class="form-label") }}
+                {{ form.last_name(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.date_of_birth.label(class="form-label") }}
+                {{ form.date_of_birth(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.enrollment_date.label(class="form-label") }}
+                {{ form.enrollment_date(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.gender.label(class="form-label") }}
+                {{ form.gender(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.grade_level.label(class="form-label") }}
+                {{ form.grade_level(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.contact_email.label(class="form-label") }}
+                {{ form.contact_email(class="form-control") }}
+            </div>
+
+             {% if form.class_id.choices[0][0] == -1 %}
+            <div class="alert alert-warning" role="alert">
+                No classes are available for your school. Please add a class first.
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+                {{ form.class_id.label(class="form-label") }}
+                {{ form.class_id(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.school_id.label(class="form-label") }}
+                {{ form.school_id(class="form-control", readonly=True) }}
+            </div>
+
+            <div class="d-grid">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('main.students') }}" class="btn btn-secondary">Back to Students</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

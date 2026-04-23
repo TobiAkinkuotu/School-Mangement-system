@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="display-4">School Registered!</h1>
+
+        <p class="lead">School Name: {{ school.name }}</p>
+        <p class="lead">Registration Link: <a href="{{ url_for('main.register_user', school_code=school.registration_code, _external=True) }}" class="btn btn-primary">{{ url_for('main.register_user', school_code=school.registration_code, _external=True) }}</a></p>
+
+        <p>Share this link with the school administrators so they can register users.</p>
+    </div>
+{% endblock %}

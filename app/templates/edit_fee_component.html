@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Fee Component - School Fees Management{% endblock %}
+
+{% block content %}
+    <h1>Edit Fee Component</h1>
+    <form method="POST" action="{{ url_for('edit_fee_component', id=component.id) }}">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ component.name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description">{{ component.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="school_id">School</label>
+            <select class="form-control" id="school_id" name="school_id" required>
+                {% for school in schools %}
+                    <option value="{{ school.id }}" {% if school.id == component.school_id %}selected{% endif %}>{{ school.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Fee Component</button>
+        <a href="{{ url_for('fee_components') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

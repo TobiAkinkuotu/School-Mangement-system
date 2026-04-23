@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.DS_Store
+*.db
+instance/
+static22/
+student_report.pdf
+student_result.pdf
+student_result_sheet.pdf

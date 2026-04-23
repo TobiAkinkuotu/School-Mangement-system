@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Edit Class</h1>
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">  <!-- Use as a variable -->
+
+        <div class="mb-3">
+            <label for="class_name" class="form-label">Class Name</label>
+            <input type="text" id="class_name" name="class_name" class="form-control" value="{{ class_to_edit.class_name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="class_category" class="form-label">Class Category</label>
+            <input type="text" id="class_category" name="class_category" class="form-control" value="{{ class_to_edit.class_category }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="class_level" class="form-label">Class Level</label>
+            <input type="text" id="class_level" name="class_level" class="form-control" value="{{ class_to_edit.class_level }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{{ url_for('main.classes') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}
