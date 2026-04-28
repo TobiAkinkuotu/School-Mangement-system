@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Student Directory</h1>
+        <p style="color: var(--text-muted);">Manage and view all registered students.</p>
+    </div>
+    <a href="{{ url_for('add_student_view') }}" class="btn" style="width: auto; padding: 0.75rem 2rem; text-decoration: none; display: inline-block;">+ Add New Student</a>
+</div>
+
+<div class="table-container animate-fade" style="animation-delay: 0.1s;">
+    <table>
+        <thead>
+            <tr>
+                <th>Reg. Number</th>
+                <th>Full Name</th>
+                <th>Class</th>
+                <th>Gender</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.registration_number }}</td>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+                <td>{{ student.current_class.name if student.current_class else 'Unassigned' }}</td>
+                <td>{{ student.gender }}</td>
+                <td>
+                    <a href="#" style="color: var(--primary); text-decoration: none; margin-right: 1rem;">Edit</a>
+                    <a href="#" style="color: var(--danger); text-decoration: none;">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    No students found. Click "Add New Student" to get started.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

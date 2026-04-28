@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "School Portal" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% if current_user %}
+    <nav class="sidebar">
+        <div class="logo">EduStream</div>
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('students') }}">Students</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('teachers') }}">Teachers</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('academic_settings') }}">Classes & Subjects</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('grades') }}">Grades</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('attendance') }}">Attendance</a>
+            </li>
+        </ul>
+        <div style="margin-top: auto;">
+            <a href="{{ url_for('logout') }}" style="color: var(--danger); text-decoration: none; font-size: 0.875rem;">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="main-content">
+        {% if request.query_params.get('error') %}
+        <div class="animate-fade" style="background: rgba(239, 68, 68, 0.2); border: 1px solid var(--danger); padding: 1rem; border-radius: 0.75rem; margin-bottom: 2rem;">
+            Invalid username or password
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

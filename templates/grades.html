@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Academic Grades</h1>
+        <p style="color: var(--text-muted);">View and manage student performance across subjects.</p>
+    </div>
+    <a href="{{ url_for('add_grade_view') }}" class="btn" style="width: auto; padding: 0.75rem 2rem; text-decoration: none; display: inline-block;">+ Post New Grade</a>
+</div>
+
+<div class="table-container animate-fade" style="animation-delay: 0.1s;">
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Term</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            <tr>
+                <td>{{ grade.student.first_name }} {{ grade.student.last_name }}</td>
+                <td>{{ grade.subject.name if grade.subject else 'N/A' }}</td>
+                <td><strong style="color: var(--primary);">{{ grade.score }}%</strong></td>
+                <td>{{ grade.term }}</td>
+                <td>{{ grade.date_recorded.strftime('%Y-%m-%d') }}</td>
+                <td>
+                    <a href="#" style="color: var(--primary); text-decoration: none;">Edit</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    No grade records found.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Record Attendance</h1>
+        <p style="color: var(--text-muted);">Mark student attendance for today.</p>
+    </div>
+</div>
+
+<div class="form-card animate-fade" style="margin: 0; max-width: 600px;">
+    <form method="POST">
+        <div class="input-group">
+            <label for="student_id">Select Student</label>
+            <select id="student_id" name="student_id" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="input-group">
+                <label for="attendance_date">Date</label>
+                <input type="date" id="attendance_date" name="attendance_date" value="{{ today }}" required>
+            </div>
+            <div class="input-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="late">Late</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn" style="margin-top: 1rem;">Record Attendance</button>
+        <a href="{{ url_for('attendance') }}" style="display: block; text-align: center; margin-top: 1rem; color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

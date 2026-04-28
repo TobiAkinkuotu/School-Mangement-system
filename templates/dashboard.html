@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Welcome, {{ current_user.username }}</h1>
+        <p style="color: var(--text-muted);">Here's what's happening at your school today.</p>
+    </div>
+</div>
+
+<div class="stats-grid animate-fade" style="animation-delay: 0.1s;">
+    <div class="stat-card">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value">{{ stats.students }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Active Teachers</div>
+        <div class="stat-value">{{ stats.teachers }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Classes</div>
+        <div class="stat-value">{{ stats.classes }}</div>
+    </div>
+</div>
+
+<div class="animate-fade" style="animation-delay: 0.2s;">
+    <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Quick Actions</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <a href="{{ url_for('add_student_view') }}" class="btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: white; text-decoration: none; display: inline-block; text-align: center;">+ Add Student</a>
+        <a href="{{ url_for('add_class_view') }}" class="btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: white; text-decoration: none; display: inline-block; text-align: center;">+ New Class</a>
+        <a href="{{ url_for('record_attendance_view') }}" class="btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: white; text-decoration: none; display: inline-block; text-align: center;">Record Attendance</a>
+        <a href="{{ url_for('add_teacher_view') }}" class="btn" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: white; text-decoration: none; display: inline-block; text-align: center;">+ Add Teacher</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-card animate-fade">
+    <div class="logo" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">EduStream</div>
+    <form action="/login" method="POST">
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+    </form>
+    <p style="text-align: center; color: var(--text-muted); font-size: 0.75rem; margin-top: 1.5rem;">
+        Default Admin: admin / admin123
+    </p>
+</div>
+{% endblock %}

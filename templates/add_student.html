@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Add New Student</h1>
+        <p style="color: var(--text-muted);">Enroll a new student into the system.</p>
+    </div>
+</div>
+
+<div class="form-card animate-fade" style="margin: 0; max-width: 600px;">
+    <form method="POST">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="input-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="input-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="registration_number">Registration Number</label>
+            <input type="text" id="registration_number" name="registration_number" placeholder="e.g. STU2024001" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="input-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn" style="margin-top: 1rem;">Enroll Student</button>
+        <a href="{{ url_for('students') }}" style="display: block; text-align: center; margin-top: 1rem; color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

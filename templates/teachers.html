@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Teacher Directory</h1>
+        <p style="color: var(--text-muted);">Manage faculty members and assignments.</p>
+    </div>
+    <a href="{{ url_for('add_teacher_view') }}" class="btn" style="width: auto; padding: 0.75rem 2rem; text-decoration: none; display: inline-block;">+ Add New Teacher</a>
+</div>
+
+<div class="table-container animate-fade" style="animation-delay: 0.1s;">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Classes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+                <td>{{ teacher.email }}</td>
+                <td>{{ teacher.phone }}</td>
+                <td>{{ teacher.classes | length }}</td>
+                <td>
+                    <a href="#" style="color: var(--primary); text-decoration: none;">Edit</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    No teachers found. Click "+ Add New Teacher" to get started.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

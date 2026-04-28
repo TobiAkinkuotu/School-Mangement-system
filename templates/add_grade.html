@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Post New Grade</h1>
+        <p style="color: var(--text-muted);">Record academic performance for a student.</p>
+    </div>
+</div>
+
+<div class="form-card animate-fade" style="margin: 0; max-width: 600px;">
+    <form method="POST">
+        <div class="input-group">
+            <label for="student_id">Select Student</label>
+            <select id="student_id" name="student_id" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }} ({{ student.registration_number }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="input-group">
+                <label for="subject_id">Subject</label>
+                <select id="subject_id" name="subject_id" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="score">Score (%)</label>
+                <input type="number" id="score" name="score" min="0" max="100" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="term">Term</label>
+            <select id="term" name="term" style="width: 100%; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--glass-border); padding: 0.75rem; border-radius: 0.75rem; color: white;">
+                <option value="First Term">First Term</option>
+                <option value="Second Term">Second Term</option>
+                <option value="Third Term">Third Term</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn" style="margin-top: 1rem;">Post Grade</button>
+        <a href="{{ url_for('grades') }}" style="display: block; text-align: center; margin-top: 1rem; color: var(--text-muted); text-decoration: none; font-size: 0.875rem;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

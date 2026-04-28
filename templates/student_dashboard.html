@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header animate-fade">
+    <div>
+        <h1 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Welcome, {{ current_user.username }}
+        </h1>
+        <p style="color: var(--text-muted);">Your academic overview at a glance.</p>
+    </div>
+</div>
+
+<div class="stats-grid animate-fade" style="animation-delay: 0.1s;">
+    <div class="stat-card">
+        <div class="stat-label">Current Grade Avg</div>
+        <div class="stat-value">{{ "%.1f"|format(avg_grade) if avg_grade else 'N/A' }}%</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Attendance Rate</div>
+        <div class="stat-value">{{ "%.1f"|format(attendance_rate) if attendance_rate else 'N/A' }}%</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Class</div>
+        <div class="stat-value" style="font-size: 1.5rem;">{{ student.current_class.name if student and student.current_class else 'Not Assigned' }}</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 2rem;" class="animate-fade" style="animation-delay: 0.2s;">
+    <!-- Recent Grades -->
+    <div class="table-container">
+        <h2 style="margin: 1.5rem; font-size: 1.25rem;">Recent Grades</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.subject.name if grade.subject else 'Unknown' }}</td>
+                    <td><strong style="color: var(--primary);">{{ grade.score }}%</strong></td>
+                    <td>{{ grade.date_recorded.strftime('%Y-%m-%d') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">No grades recorded yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Attendance Summary -->
+    <div class="form-card" style="margin: 0;">
+        <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem;">Attendance Stats</h2>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between;">
+                <span>Total Days</span>
+                <strong>{{ total_days }}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span>Present</span>
+                <span style="color: var(--success);">{{ present_days }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span>Absent</span>
+                <span style="color: var(--danger);">{{ absent_days }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
